@@ -10,10 +10,7 @@ import Foundation
 
 class Networking {
     
-    let helper: Helper!
-    init(helper: Helper) {
-        self.helper = helper
-    }
+    let helper = Helper()
     
     func loginUser(userName: String, uid: String) {
         
@@ -41,7 +38,9 @@ class Networking {
             do {
                 let responseObject = try JSONSerialization.jsonObject(with: data, options: [])
                 if let responseJSON = responseObject as? [String: Any] {
-                    self.helper.saveToken(token: responseJSON["token"]! as! String)
+                    let token = responseJSON["token"]
+                    guard token != nil else { return }
+                    self.helper.saveToken(token: token as? String)
                 }
             } catch {
                 print(error)
@@ -50,7 +49,7 @@ class Networking {
         }.resume()
     }
     
-    func getRating() {
+    func getRating(completionHandler: @escaping (_ rating: [Users]?)->() ) {
         let token = helper.getToken()
         let url = "https://handlingso.club/api/1.0/rating"
         var urlRequest = URLRequest(url: URL(string: url)!)
@@ -63,8 +62,13 @@ class Networking {
         
         session.dataTask(with: urlRequest) { (data, response, error) in
             guard let data = data else { return }
-            let json = self.decodeJSON(type: Rating.self, from: data)
-            print(json!)
+            if !data.isEmpty {
+                let json = self.decodeJSON(type: Rating.self, from: data)
+                completionHandler(json!.rows)
+            } else {
+                completionHandler(nil)
+            }
+            
             
         }.resume()
     }

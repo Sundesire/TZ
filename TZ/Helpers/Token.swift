@@ -10,10 +10,12 @@ import Foundation
 
 struct Token {
     static let token = "token"
+    static let login = "login"
 }
 
 class Helper {
-    func saveToken(token: String) {
+    func saveToken(token: String?) {
+        guard token != nil else { return }
         let defaults = UserDefaults.standard
         defaults.set(token, forKey: Token.token)
     }
@@ -24,5 +26,10 @@ class Helper {
             return token
         }
         return nil
+    }
+    
+    func setLogin() {
+        let defaults = UserDefaults.standard
+        defaults.set(true, forKey: Token.login)
     }
 }

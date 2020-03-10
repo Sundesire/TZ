@@ -14,7 +14,6 @@ class LeaderTableViewCell: UITableViewCell {
     
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var userPoints: UILabel!
-    @IBOutlet weak var bgView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,9 +24,11 @@ class LeaderTableViewCell: UITableViewCell {
         super.init(coder: coder)
     }
     
-    func configure(name: String, points: Int) {
-        userName.text = name
-        userPoints.text = String(points)
+    func configure(user: Users) {
+        userName.text = user.User.name
+        userPoints.text = "User points: " + String(user.totalScore)
+        self.backgroundColor = .clear
+        self.selectionStyle = .none
     }
     
 }
