@@ -69,6 +69,7 @@ class ViewController: UIViewController {
         activityIndicator.startAnimating()
         let uid = UIDevice.current.identifierForVendor!.uuidString
         guard checkLoginTextField() else {
+            activityIndicator.stopAnimating()
             return
         }
         
