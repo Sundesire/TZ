@@ -30,6 +30,7 @@ class LeaderTableViewController: UIViewController {
     }
     
     @objc func getRating() {
+        users = nil
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
