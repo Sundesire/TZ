@@ -64,15 +64,22 @@
                                     <constraint firstItem="BeJ-TQ-YAX" firstAttribute="top" secondItem="f8r-fP-K49" secondAttribute="bottom" constant="8" id="yR9-61-uJk"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="pL6-f1-SFy">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                                <color key="color" red="0.48305395239999999" green="1" blue="0.35096046339999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="hmp-zu-DSM" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Gwc-pM-PYz"/>
+                            <constraint firstItem="pL6-f1-SFy" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="eAG-ky-8yd"/>
+                            <constraint firstItem="pL6-f1-SFy" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="rB8-ET-u2r"/>
                             <constraint firstItem="hmp-zu-DSM" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="xrt-31-QBP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="pL6-f1-SFy" id="mqW-li-kFD"/>
                         <outlet property="loginTextField" destination="f8r-fP-K49" id="QFh-gC-XsB"/>
                         <outlet property="loginView" destination="hmp-zu-DSM" id="VZe-23-QaZ"/>
                         <outlet property="okButton" destination="BeJ-TQ-YAX" id="q8V-d6-LLm"/>
@@ -93,6 +100,11 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="gpB-sF-rsK">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                                 <color key="backgroundColor" red="0.15245154499999999" green="0.1685512364" blue="0.17692670229999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" id="R4q-94-j5D">
+                                    <rect key="frame" x="0.0" y="148" width="414" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="color" red="0.48305395239999999" green="1" blue="0.35096046339999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </activityIndicatorView>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LeaderTableViewCell" rowHeight="92" id="cGP-Cg-fv1" customClass="LeaderTableViewCell" customModule="TZ" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="92"/>
@@ -168,6 +180,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="R4q-94-j5D" id="O2A-rZ-MCm"/>
                         <outlet property="tableView" destination="gpB-sF-rsK" id="T0K-dJ-WJL"/>
                     </connections>
                 </viewController>

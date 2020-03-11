@@ -15,6 +15,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var loginView: UIView!
     
     var networking: Networking!
+    var helper: Helper!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,12 +26,16 @@ class ViewController: UIViewController {
         loginTextField.attributedPlaceholder = NSAttributedString(string: "User 8463",
         attributes: [NSAttributedString.Key.foregroundColor: UIColor(cgColor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1))])
         
-        networking = Networking()
+        helper = Helper()
+        networking = Networking(helper: helper)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        activityIndicator.isHidden = true
+        activityIndicator.hidesWhenStopped = true
     }
     
     @objc func dismissKeyboard() {
@@ -53,20 +59,28 @@ class ViewController: UIViewController {
     func checkLoginTextField() -> Bool {
         if loginTextField.text!.isEmpty {
             loginTextField.placeholder = "Enter user name!"
-            print("failed")
             return false
         }
         return true
     }
 
     @IBAction func okButtonTouched(_ sender: Any) {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
         let uid = UIDevice.current.identifierForVendor!.uuidString
         guard checkLoginTextField() else {
             return
         }
-        networking.loginUser(userName: loginTextField.text!, uid: uid)
-        UserDefaults.standard.set(true, forKey: Token.login)
-        Switcher.updateRootVC()
+        
+        networking.loginUser(userName: loginTextField.text!, uid: "UserId\(uid)") {[weak self] (token) in
+            guard token != nil else { return }
+            DispatchQueue.main.async {
+                self?.helper.saveToken(token: token)
+                UserDefaults.standard.set(true, forKey: Token.login)
+                self?.activityIndicator.stopAnimating()
+                Switcher.updateRootVC()
+            }
+        }
     }
 }
 

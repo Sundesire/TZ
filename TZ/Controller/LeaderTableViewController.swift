@@ -12,33 +12,46 @@ class LeaderTableViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     var users: [Users]? = []
+    var helper: Helper!
     var networking: Networking!
     var timer: Timer?
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.backgroundColor = .black
-        networking = Networking()
+        helper = Helper()
+        networking = Networking(helper: helper)
         
+        activityIndicator.isHidden = true
+        activityIndicator.hidesWhenStopped = true
         getRating()
         timer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(getRating), userInfo: nil, repeats: true)
     }
     
     @objc func getRating() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        
         networking.getRating {[weak self] (usersRating) in
-            if usersRating != nil {
-                var i = 0
-                while i < 5 {
-                    self?.users?.append(usersRating![i])
-                    i += 1
-                }
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            } else {
+            guard usersRating != nil else {
+                self?.users = nil
                 self?.showAlert(with: "Ошибка!", message: "Невозможно получить данные")
+                DispatchQueue.main.async {
+                    self?.activityIndicator.stopAnimating()
+                }
+                return
             }
             
+            var i = 0
+            while i < 5 {
+                self?.users?.append(usersRating![i])
+                i += 1
+            }
+            DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                self?.tableView.reloadData()
+            }
         }
         print("timer completed")
     }
